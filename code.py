@@ -81,7 +81,7 @@ def Missing_values(data):
 
     def normal(x):
         return x/(max(x)-min(x))
-        
+    #normalizing the numerical values for knn classification    
     training=training.apply(normal)
     validation=validation.apply(normal)
 
