@@ -10,7 +10,7 @@ from sklearn.cross_validation import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.grid_search import GridSearchCV
-
+from sklearn.ensemble import AdaBoostClassifier
 
 #importing training and testing datasets
 train = pd.DataFrame
@@ -179,6 +179,10 @@ clf = GradientBoostingClassifier(n_estimators=100)
 gs_cv = GridSearchCV(clf,param_grid).fit(X, y)
 print (gs_cv.best_params_)
 
+#adaboostingclassification
+clf = AdaBoostClassifier(n_estimators=500, learning_rate=1.0)
+scores = cross_val_score(clf, X, y, scoring='roc_auc', n_jobs=-1)
+print("ROC Random Forest: {:.4f} +/-{:.4f}".format( np.mean(scores), np.std(scores)))
 
 #fitting the best model
 clf = clf.fit(X, y)
