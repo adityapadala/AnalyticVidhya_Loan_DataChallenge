@@ -11,6 +11,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.grid_search import GridSearchCV
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn import tree
+
 
 #importing training and testing datasets
 train = pd.DataFrame
@@ -192,4 +194,5 @@ x=clf.predict(test2_sub)
 
 sub = pd.concat([test1['Loan_ID'],pd.DataFrame(x)],axis=1)
 sub.columns=['Loan_ID','Loan_Status']
-sub.to_csv('fakepath/submission.csv')
+sub['Loan_Status'] = np.where(sub['Loan_Status']==1,"Y","N")
+sub.to_csv('fakepath/submission.csv',index = False)
