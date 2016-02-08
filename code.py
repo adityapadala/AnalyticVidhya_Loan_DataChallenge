@@ -9,7 +9,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.cross_validation import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
-
+from sklearn.grid_search import GridSearchCV
 
 
 #importing training and testing datasets
@@ -167,21 +167,21 @@ print("ROC AUC Decision Tree: {:.4f} +/-{:.4f}".format(np.mean(scores), np.std(s
 
 
 #RandomForestClassification
-clf = RandomForestClassifier(n_estimators=50, max_features=4,max_depth=10)
-scores = cross_val_score(clf, X_train, y_train, cv=5, scoring='roc_auc',n_jobs=-1)
+clf = RandomForestClassifier(n_estimators=100, max_features=4,max_depth=10)
+scores = cross_val_score(clf, X, y, cv=5, scoring='roc_auc',n_jobs=-1)
 print("ROC Random Forest: {:.4f} +/-{:.4f}".format(np.mean(scores), np.std(scores)))
 #ROC Random Forest: 0.7660 +/-0.0663
 
 
 #gradientBoostingClassification
-clf = GradientBoostingClassifier(max_leaf_nodes=5, learning_rate=0.1,n_estimators=100)
-scores = cross_val_score(clf, X_train, y_train, cv=5, scoring='roc_auc',n_jobs=-1)
-print("ROC AUC Gradient Boosted Trees: {:.4f} +/-{:.4f}".format(np.mean(scores), np.std(scores)))
-#ROC AUC Gradient Boosted Trees: 0.7429 +/-0.0719
+param_grid = { 'learning_rate': [0.1,0.05,0.02,0.01],'max_depth':[4,6],'min_samples_leaf':[3,5,9,17],'max_features':[1.0,0.3,0.1]}
+clf = GradientBoostingClassifier(n_estimators=100)
+gs_cv = GridSearchCV(clf,param_grid).fit(X, y)
+print (gs_cv.best_params_)
 
 
 #fitting the best model
-clf = clf.fit(X_train, y_train)
+clf = clf.fit(X, y)
 #misclassification rate on training set
 sum(clf.predict(X_test)==y_test)/len(y_test)
 x=clf.predict(test2_sub)
